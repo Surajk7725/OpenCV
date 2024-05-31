@@ -1,0 +1,46 @@
+1) cv2.Canny :- It means Canny edge detection algorithm is a multi-stage process that detects a wide range of edges
+in images. It's widely used in image processing for edge detection.
+
+Structure will be cv2.Canny(frame,lower_threshold,upper_threshold)
+
+2) frame = cv2.flip(frame, 1)  :- This flips the frame horizontally. The 1 indicates a horizontal flip (around the y-axis).
+
+3)cv2.blur :- It means an image processing technique used to reduce noise and details in an image.
+It is often used to pre-process images before performing other tasks such as edge detection or object recognition.
+
+Structure :- cv2.blur(frame, (13,13))
+
+cv2.blur(src, ksize, borderType=cv2.BORDER_DEFAULT)
+
+a) src :- The source image on which the blurring operation is to be applied.
+b) ksize :- The size of the kernel used for blurring. It should be a tuple of two integers (width, height).
+c) borderType :-  The pixel extrapolation method used at the borders of the image. The default value is cv2.BORDER_DEFAULT. Other options include:
+
+-->cv2.BORDER_CONSTANT: Pad with a constant value.
+-->cv2.BORDER_REPLICATE: Replicate the border pixels.
+-->cv2.BORDER_REFLECT: Reflect the border pixels.
+-->cv2.BORDER_WRAP: Wrap around the border.
+
+4)feature_params = dict(maxCorners=500, qualityLevel=0.2, minDistance=15, blockSize=9)
+
+In short, feature_params dictionary sets the rules for how the corner detection algorithm should find and filter the best corners in an image.
+
+a) maxCorners=500: Detect up to 500 corners in the image.
+b) qualityLevel=0.2: Only keep corners that have a quality score of at least 20% of the best corner's score.
+c) minDistance=15: Ensure that each detected corner is at least 15 pixels away from other detected corners.
+d) blockSize=9: Use a 9x9 pixel area to calculate the quality score for each corner.
+
+5) corners = cv2.goodFeaturesToTrack(frame_gray, **feature_params)
+-->This line finds corners in the grayscale image frame_gray using the parameters in feature_params.
+-->The result, corners, is a list of points where the corners are detected.
+
+6)for x, y in numpy.float32(corners).reshape(-1, 2):
+    cv2.circle(frame, (int(x), int(y)), 10, (0, 255, 0), 1)
+
+--> numpy.float32(corners).reshape(-1, 2) converts the corner points to a list of (x, y) coordinates.
+--> For each (x, y) coordinate, it draws a circle on the original image frame
+a) cv2.circle(frame, (int(x), int(y)), 10, (0, 255, 0), 1) draws a circle centered at (x, y).
+b) int(x) and int(y) convert the coordinates to integers.
+c) 10 is the radius of the circle.
+d) (0, 255, 0) is the color of the circle (green in BGR format).
+e) 1 is the thickness of the circle’s outline.

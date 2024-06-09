@@ -1,0 +1,67 @@
+Structure:-
+
+1)Import Libraries
+2)Set Video Source
+3)Capture Video (cv2.VideoCapture)
+4)Create Display Window(cv2.namedWindow)
+
+5)Load Pre-trained Model(cv2.dnn.readNetFromCaffe)
+--> net = cv2.dnn.readNetFromCaffe means 'cv2' is the OpenCV library for computer vision and deep learning, 'cv2.dnn' is its module for deep neural networks, and 'readNetFromCaffe' is a function in this module to load pre-trained models from the Caffe framework.
+-->"deploy.prototxt" :-
+a)This is the model configuration file.
+b)Download file:-https://github.com/opencv/opencv/blob/3282954c2ea8d5873b8d50aff09d7b4a43a64c38/samples/dnn/face_detector/deploy.prototxt#L4
+c)It defines the architecture of the neural network, including the types of layers, the connections between layers, and the layer parameters.
+d)Essentially, it tells the network how to process an input image and generate an output.
+
+-->res10_300x300_ssd_iter_140000.caffemodel:-
+a)This file contains the pre-trained weights of the neural network.
+b)Download file:-https://github.com/opencv/opencv_3rdparty/raw/dnn_samples_face_detector_20170830/res10_300x300_ssd_iter_140000.caffemodel
+c)It represents the learned parameters of the model that have been obtained by training the network on a large dataset of images.
+d)res10: The base architecture, which could be a ResNet-10 model.
+e)300x300: The input size that the network expects (300 pixels by 300 pixels).
+f)ssd: Single Shot MultiBox Detector, a type of neural network architecture used for object detection.
+g)iter_140000: The model was saved after 140,000 iterations of training.
+
+
+6)Set Model Parameters
+-->in_width = 300, in_height = 300: Size of the input blob for the neural network.
+-->mean = [104, 117, 123]: Mean values for the input image.
+-->conf_threshold = 0.7: Confidence threshold for detecting faces.
+
+
+7)Main Loop (until 'Esc' key)
+-->Read Frame
+-->If no frame, break
+-->Flip Frame (cv2.filp(frame,1))
+
+-->Get Frame Dimensions
+a)frame_height = frame.shape[0]
+b)frame_width = frame.shape[1].
+
+
+-->Create Blob
+a)Create a 4D blob from the frame.
+b)cv2.dnn.blobFromImage:- This function converts an image into a blob, which is a format suitable for deep learning models.
+
+
+-->Run Model (net.setInput(blob): Set the blob as input to the model.)
+-->Get Detections(detections = net.forward(): Get the output from the model.)
+8)Process Detections
+-->If confidence > threshold
+-->Calculate Bounding Box
+-->Draw Bounding Box and Label
+
+-->Display Inference Time
+a)t, _ = net.getPerfProfile(): This function is used to retrieve the performance profile of the last forward pass (i.e., the last time the model made a prediction).
+b)where t = The total time taken by the layers in the network for the forward pass, measured in clock ticks.
+        _ = This is a placeholder for another return value that we're not using here.
+c)label = "Inference time: %.2f ms" % (t * 1000.0 / cv2.getTickFrequency())
+where
+-->t * 1000.0: Converts the clock ticks to milliseconds (since there are 1000 milliseconds in a second).
+-->cv2.getTickFrequency(): The frequency of clock ticks per second.
+-->(t * 1000.0 / cv2.getTickFrequency()): This formula converts the time taken by the network from clock ticks to milliseconds.
+
+
+-->Show Frame
+9)Release Video Capture
+10)Close Window
